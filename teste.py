@@ -1,6 +1,5 @@
-lista = [1, 2, 3, 4]
+import pandas as pd
 
-suamae = sum(lista)
-print(suamae)
+lista = [0 ,1 ,2 ,3 ,4 ,5]
 
-print(type(suamae))
+mean(lista)

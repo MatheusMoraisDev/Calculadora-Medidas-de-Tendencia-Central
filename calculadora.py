@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+import pandas as pd
 root = Tk()
 
 class Funcs():
@@ -50,12 +51,35 @@ class Funcs():
             col1, col2, col3 = self.listaCli.item(n,'values')
             self.valor_entry.insert(END, col1) 
             self.frequencia_entry.insert(END, col2)
-    def deleta_cliente(self):
+    def deleta_valor(self):
         self.variaveis()
         self.limpa_tela()
         for n in self.listaCli.selection():
             self.listaCli.delete(n)
-            self.listaCli.update_idletasks()   
+            self.listaCli.update_idletasks()
+    def calcular_media(self):
+        coluna_valores = []
+        for item in self.listaCli.get_children():
+                valor = self.listaCli.item(item, 'values')
+                coluna_valores.append(valor)
+        df = pd.DataFrame(coluna_valores)
+        df.drop(columns=[2], inplace=True)
+        df[0] = df[0].apply(lambda x: int(x))
+        df[1] = df[1].apply(lambda x: int(x))
+        df[2] = df[0] * df[1]
+        print(df[2].sum() / df[1].sum())
+    def calcular_moda(self):
+        coluna_valores = []
+        for item in self.listaCli.get_children():
+                valor = self.listaCli.item(item, 'values')
+                coluna_valores.append(valor)
+        df = pd.DataFrame(coluna_valores)
+        df.drop(columns=[2], inplace=True)
+        df[0] = df[0].apply(lambda x: int(x))
+        df[1] = df[1].apply(lambda x: int(x))
+        moda = df[1].max()
+        classe_modal = df.loc[df[1] == moda]
+        print(int(classe_modal[0]))
 class Application(Funcs):
     def __init__(self):
         self.root = root
@@ -90,7 +114,7 @@ class Application(Funcs):
         self.novo.place(relx=0.19, rely=0.1, relwidth=0.1, relheight=0.15)
         
         ###Criação do botão Apagar
-        self.bt_limpar = Button(self.frame_1, text="Apagar", font=('verdana', 10, 'bold'), command=self.deleta_cliente)
+        self.bt_limpar = Button(self.frame_1, text="Apagar", font=('verdana', 10, 'bold'), command=self.deleta_valor)
         self.bt_limpar.place(relx=0.82, rely=0.1, relwidth=0.1, relheight=0.15)
     
         ## Criação da label e entrada do valor
@@ -120,11 +144,11 @@ class Application(Funcs):
         self.scrollLista.place(relx=0.96, rely=0.1, relwidth=0.03, relheight=0.85)
         self.listaCli.bind("<Double-1>", self.OnDoubleClick)
     def widgets_frame3(self):
-        self.bt_media = Button(self.frame_3, text="Média", font=('verdana', 10, 'bold'))
+        self.bt_media = Button(self.frame_3, text="Média", font=('verdana', 10, 'bold'), command=self.calcular_media)
         self.bt_media.place(relx=0.07, rely=0.1, relwidth=0.1, relheight=0.15)
         self.bt_mediana = Button(self.frame_3, text="Mediana", font=('verdana', 10, 'bold'))
         self.bt_mediana.place(relx=0.19, rely=0.1, relwidth=0.1, relheight=0.15)
-        self.bt_moda = Button(self.frame_3, text="Moda", font=('verdana', 10, 'bold'))
+        self.bt_moda = Button(self.frame_3, text="Moda", font=('verdana', 10, 'bold'), command= self.calcular_moda)
         self.bt_moda.place(relx=0.31, rely=0.1, relwidth=0.1, relheight=0.15)
         self.bt_desvio_padrao = Button(self.frame_3, text="Desvio Padrão", font=('verdana', 10, 'bold'))
         self.bt_desvio_padrao.place(relx=0.50, rely=0.1, relwidth=0.15, relheight=0.15)
