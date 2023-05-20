@@ -155,3 +155,5 @@ class Application(Funcs):
         self.bt_coef_variacao = Button(self.frame_3, text="Coeficiente de Variação", font=('verdana', 10, 'bold'))
         self.bt_coef_variacao.place(relx=0.67, rely=0.1, relwidth=0.25, relheight=0.15)
 Application()
+
+### Atualização do projeto
