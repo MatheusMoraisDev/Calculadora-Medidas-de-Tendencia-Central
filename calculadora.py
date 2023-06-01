@@ -80,6 +80,7 @@ class Funcs():
         moda = df[1].max()
         classe_modal = df.loc[df[1] == moda]
         print(int(classe_modal[0]))
+        khj
 class Application(Funcs):
     def __init__(self):
         self.root = root
