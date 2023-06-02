@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 import pandas as pd
 
 root = Tk()
@@ -83,7 +84,6 @@ class Funcs:
         df[1] = df[1].apply(lambda x: int(x))
         df[2] = df[0] * df[1]
         media = df[2].sum() / df[1].sum()
-        print(media)
         return media
 
     def calcular_moda(self):
@@ -97,7 +97,7 @@ class Funcs:
         df[1] = df[1].apply(lambda x: int(x))
         moda = df[1].max()
         classe_modal = df.loc[df[1] == moda]
-        print(int(classe_modal[0]))
+        return int(classe_modal[0])
 
     def calcular_desvioPadrao(self):
         coluna_valores = []
@@ -112,7 +112,6 @@ class Funcs:
         media = df[2].sum() / df[1].sum()
         mediaElevada = ((df[0] ** 2) * df[1]).sum() / df[1].sum()
         desvioPadrao = (mediaElevada - ((media) ** 2)) ** 0.5
-        print(desvioPadrao)
         return desvioPadrao
 
     def calcular_mediana(self):
@@ -129,7 +128,7 @@ class Funcs:
             mediana = df[1].sum() / 2
         else:
             mediana = (df[1].sum() + 1) / 2
-        print(int(mediana))
+        return int(mediana)
 
     def calcular_coeficienteDeVariacao(self):
         coluna_valores = []
@@ -141,7 +140,7 @@ class Funcs:
         df[0] = df[0].apply(lambda x: int(x))
         df[1] = df[1].apply(lambda x: int(x))
         coeficiente = (self.calcular_desvioPadrao() / self.calcular_media())*100
-        print(coeficiente)
+        return coeficiente
 
     def calcular_amplitude_total(self):
         coluna_valores = []
@@ -152,7 +151,7 @@ class Funcs:
         df.drop(columns=[2], inplace=True)
         df[0] = df[0].apply(lambda x: int(x))
         df[1] = df[1].apply(lambda x: int(x))
-        print(int(df[0].max() - df[0].min()))
+        return int(df[0].max() - df[0].min())
 
 
 class Application(Funcs):
@@ -249,44 +248,55 @@ class Application(Funcs):
             self.frame_3,
             text="Média",
             font=("verdana", 10, "bold"),
-            command=self.calcular_media,
+            command=lambda: self.exibir_resultado(self.calcular_media()),
         )
-        self.bt_media.place(relx=0.07, rely=0.1, relwidth=0.1, relheight=0.15)
+        self.bt_media.place(relx=0.06, rely=0.1, relwidth=0.1, relheight=0.15)
         self.bt_mediana = Button(
             self.frame_3,
             text="Mediana",
             font=("verdana", 10, "bold"),
-            command=self.calcular_mediana,
+            command=lambda: self.exibir_resultado(self.calcular_mediana()),
         )
-        self.bt_mediana.place(relx=0.18, rely=0.1, relwidth=0.1, relheight=0.15)
+        self.bt_mediana.place(relx=0.17, rely=0.1, relwidth=0.1, relheight=0.15)
         self.bt_moda = Button(
             self.frame_3,
             text="Moda",
             font=("verdana", 10, "bold"),
-            command=self.calcular_moda,
+            command=lambda: self.exibir_resultado(self.calcular_moda()),
         )
-        self.bt_moda.place(relx=0.29, rely=0.1, relwidth=0.1, relheight=0.15)
+        self.bt_moda.place(relx=0.28, rely=0.1, relwidth=0.1, relheight=0.15)
         self.bt_desvio_padrao = Button(
             self.frame_3,
             text="Desvio Padrão",
             font=("verdana", 10, "bold"),
-            command=self.calcular_desvioPadrao,
+            command=lambda: self.exibir_resultado(self.calcular_desvioPadrao()),
         )
-        self.bt_desvio_padrao.place(relx=0.40, rely=0.1, relwidth=0.15, relheight=0.15)
+        self.bt_desvio_padrao.place(relx=0.39, rely=0.1, relwidth=0.15, relheight=0.15)
         self.bt_coef_variacao = Button(
             self.frame_3,
             text="Coeficiente de Variação",
             font=("verdana", 10, "bold"),
-            command=self.calcular_coeficienteDeVariacao,
+            command=lambda: self.exibir_resultado(self.calcular_coeficienteDeVariacao()),
         )
-        self.bt_coef_variacao.place(relx=0.55, rely=0.1, relwidth=0.25, relheight=0.15)
-        self.bt_coef_variacao = Button(
+        self.bt_coef_variacao.place(relx=0.55, rely=0.1, relwidth=0.23, relheight=0.15)
+        self.bt_amp_total = Button(
             self.frame_3,
             text="Amplitude Total",
             font=("verdana", 10, "bold"),
-            command=self.calcular_amplitude_total,
+            command=lambda: self.exibir_resultado(self.calcular_amplitude_total()),
         )
-        self.bt_coef_variacao.place(relx=0.70, rely=0.1, relwidth=0.15, relheight=0.15)
+        self.bt_amp_total.place(relx=0.79, rely=0.1, relwidth=0.16, relheight=0.15)
+
+        self.resultado_label = Label(
+            self.frame_3,
+            font=("verdana", 10, "bold"),
+        )
+        self.resultado_label.place(relx=0.39, rely=0.4, relwidth=0.20, relheight=0.15)
+
+    def exibir_resultado(self, resultado):
+        self.resultado_label.config(text="Resultado: {:.4f}".format(resultado))
+
+
 
 
 Application()
