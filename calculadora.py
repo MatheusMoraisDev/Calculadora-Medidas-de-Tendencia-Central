@@ -233,7 +233,7 @@ class Application(Funcs):
         self.listaCli.heading("#0", text="")
         self.listaCli.heading("#1", text="Valor")
         self.listaCli.heading("#2", text="Frequência Absoluta")
-        self.listaCli.heading("#3", text="Frequência Acumuladaa")
+        self.listaCli.heading("#3", text="Frequência Acumulada")
         self.listaCli.column("#0", width=1)
         self.listaCli.column("#1", width=100)
         self.listaCli.column("#2", width=300)
