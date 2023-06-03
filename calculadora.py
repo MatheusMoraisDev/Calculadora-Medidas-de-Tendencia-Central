@@ -5,7 +5,6 @@ import pandas as pd
 
 root = Tk()
 
-
 class Funcs:
     def limpa_tela(self):
         self.valor_entry.delete(0, END)
@@ -17,13 +16,18 @@ class Funcs:
 
     def add_valor(self):
         self.variaveis()
-        self.select_lista()
-        self.limpa_tela()
-
+        if self.valor or self.frequencia:
+            if self.valor.isdigit() and self.frequencia.isdigit():
+                self.select_lista()
+                self.limpa_tela()
+            else:
+                messagebox.showerror("Erro", "Insira somente números!")
+        else:
+            messagebox.showerror("Erro", "Insira alguma coisa!")
     def select_lista(self):
         self.variaveis()
-        iid = len(self.listaCli.get_children())
-        if self.valor and self.frequencia:
+        if self.valor or self.frequencia:
+            iid = len(self.listaCli.get_children())
             self.calc_freq_acumulada()
             self.listaCli.insert(
                 parent="",
@@ -57,6 +61,14 @@ class Funcs:
         except:
             self.freq_acumulada = self.frequencia
 
+    def atualizar_freq_acumulada(self):
+        items = self.listaCli.get_children()
+        freq_acumulada = 0
+        for item in items:
+            freq_absoluta = int(self.listaCli.item(item, "values")[1])
+            freq_acumulada += freq_absoluta
+            self.listaCli.item(item, values=(self.listaCli.item(item, "values")[0], freq_absoluta, freq_acumulada))
+
     def OnDoubleClick(self, event):
         self.limpa_tela()
         self.listaCli.selection()
@@ -72,6 +84,7 @@ class Funcs:
         for n in self.listaCli.selection():
             self.listaCli.delete(n)
             self.listaCli.update_idletasks()
+        self.atualizar_freq_acumulada()
 
     def calcular_media(self):
         coluna_valores = []
@@ -129,6 +142,7 @@ class Funcs:
         else:
             mediana = (df[1].sum() + 1) / 2
         return int(mediana)
+       
 
     def calcular_coeficienteDeVariacao(self):
         coluna_valores = []
@@ -166,7 +180,7 @@ class Application(Funcs):
         root.mainloop()
 
     def tela(self):
-        self.root.title("Cadastro de Clientes")
+        self.root.title("Calculadora de Medidas de Tendências Centrais")
         self.root.configure(background="#53524B")
         self.root.geometry("788x1000")
         self.root.resizable(True, True)
@@ -279,6 +293,7 @@ class Application(Funcs):
             command=lambda: self.exibir_resultado(self.calcular_coeficienteDeVariacao()),
         )
         self.bt_coef_variacao.place(relx=0.55, rely=0.1, relwidth=0.23, relheight=0.15)
+        
         self.bt_amp_total = Button(
             self.frame_3,
             text="Amplitude Total",
@@ -297,8 +312,4 @@ class Application(Funcs):
         self.resultado_label.config(text="Resultado: {:.4f}".format(resultado))
 
 
-
-
 Application()
-
-### Atualização do projeto
