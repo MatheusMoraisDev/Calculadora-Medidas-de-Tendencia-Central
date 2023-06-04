@@ -16,16 +16,28 @@ class Funcs:
 
     def add_valor(self):
         self.variaveis()
-        if self.valor or self.frequencia:
-            if self.valor.isdigit() and self.frequencia.isdigit():
-                self.select_lista()
-                self.limpa_tela()
-                self.organizar()
-                self.atualizar_freq_acumulada()
-            else:
-                messagebox.showerror("Erro", "Insira somente números!")
+        coluna_valores = []
+        for item in self.listaCli.get_children():
+                valor = self.listaCli.item(item, "values")[1]
+                coluna_valores.append(valor)
+        if self.valor in coluna_valores:
+            messagebox.showerror("Erro", "Valor já inserido!")
+        elif not self.valor.isdigit() or not self.frequencia.isdigit():
+            messagebox.showerror("Erro", "Insira somente números!")
         else:
-            messagebox.showerror("Erro", "Insira alguma coisa!")
+            self.select_lista()
+            self.limpa_tela()
+            self.organizar()
+            self.atualizar_freq_acumulada()
+
+    def teste(self):
+        self.variaveis()
+        coluna_valores = []
+        for item in self.listaCli.get_children():
+                valor = self.listaCli.item(item, "values")[1]
+                coluna_valores.append(int(valor))
+        print(coluna_valores)
+
     def select_lista(self):
         self.variaveis()
         if self.valor or self.frequencia:
@@ -85,6 +97,7 @@ class Funcs:
             self.listaCli.update_idletasks()
         self.organizar()
         self.atualizar_freq_acumulada()
+
     def calcular_media(self):
         coluna_valores = []
         for item in self.listaCli.get_children():
@@ -308,7 +321,7 @@ class Application(Funcs):
         self.bt_amp_total = ttk.Button(
             self.frame_3,
             text="Amplitude Total",
-            command=lambda: self.exibir_resultado(self.calcular_amplitude_total()),
+            command=self.teste,
             style="RoundedButton.TButton"
         )
         self.bt_amp_total.place(relx=0.82, rely=0.1, relwidth=0.16, relheight=0.15)
