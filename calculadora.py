@@ -1,7 +1,6 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
-import awesometkinter as atk
 import pandas as pd
 
 root = Tk()
@@ -174,7 +173,7 @@ class Application(Funcs):
         self.root = root
         self.tela()
         self.frames_da_tela()
-        self.bottom_style()
+        self.style()
         self.widgets_frame1()
         self.lista_frame2()
         self.select_lista()
@@ -195,17 +194,28 @@ class Application(Funcs):
         self.frame_3 = Frame(self.root, bg="#ffffff")
         self.frame_3.place(relx=0.02, rely=0.68, relwidth=0.96, relheight=0.30)
 
-    def bottom_style(self):
-        self.style = ttk.Style(root)
-        self.style.configure("RoundedButton.TButton", borderwidth=0, relief="flat", background="#5E8CFF", foreground="#000000", font=("verdana", 12, "bold"))
+    def style(self):
+            self.style = ttk.Style(root)
+            self.style.theme_use("xpnative")
+            self.style.configure(
+                "Custom.Treeview",
+                fieldbackground="#5E8CFF",
+                background="#D9D9D9",
+                forebackground='#D9D9D9')
+            self.style.configure(
+                "RoundedButton.TButton", 
+                borderwidth=0, 
+                relief="flat", 
+                font=("Arial", 8, "bold")
+            )
 
     def widgets_frame1(self):
         
         ###Criação do Título da Página
         self.lb_titulo = Label(
-            self.frame_1, text="Calculadora - Medidas de Tendência Central", font=("verdana", 14, "bold"), bg="#ffffff"
+            self.frame_1, text="Calculadora - Medidas de Tendência Central", font=("Arial", 14, "bold"), bg="#ffffff"
         )
-        self.lb_titulo.place(relx=0.17, rely=0.07)
+        self.lb_titulo.place(relx=0.225, rely=0.07)
         ###Criação do botão Limpar
         self.bt_limpar = ttk.Button(
             self.frame_1,
@@ -226,25 +236,23 @@ class Application(Funcs):
 
         ## Criação da label e entrada do valor
         self.lb_valor = Label(
-            self.frame_1, text="Valor", font=("verdana", 10, "bold"), bg="#ffffff"
+            self.frame_1, text="Valor", font=("Arial", 10, "bold"), bg="#ffffff"
         )
         self.lb_valor.place(relx=0.19, rely=0.2)
         
-        self.valor_entry = Entry(self.frame_1, background="#D9D9D9")
+        self.valor_entry = Entry(self.frame_1, background="#ffffff")
         self.valor_entry.place(relx=0.19, rely=0.25, relwidth=0.1, relheight=0.05)
 
         ## Criação da label e entrada da frequência
         self.lb_frequencia = Label(
-            self.frame_1, font=("verdana", 10, "bold"), text="Frequência", bg="#ffffff"
+            self.frame_1, font=("Arial", 10, "bold"), text="Frequência", bg="#ffffff"
         )
         self.lb_frequencia.place(relx=0.35, rely=0.2)
-        self.frequencia_entry = Entry(self.frame_1,  background="#D9D9D9")
+        self.frequencia_entry = Entry(self.frame_1, background="#ffffff", highlightbackground="black", highlightcolor="black", highlightthickness=0.4)
         self.frequencia_entry.place(relx=0.35, rely=0.25, relwidth=0.1, relheight=0.05)
 
+
     def lista_frame2(self):
-        style = ttk.Style(root)
-        style.theme_use("clam")
-        style.configure("Custom.Treeview", fieldbackground="#D9D9D9", background="#D9D9D9", forebackground='#D9D9D9')
         self.listaCli = ttk.Treeview(self.frame_1, height=3, column=("col1", "col2", "col3", "col4"), style="Custom.Treeview")
         self.listaCli.heading("#0", text="")
         self.listaCli.heading("#1", text="Valor")
@@ -265,22 +273,23 @@ class Application(Funcs):
             self.frame_3,
             text="Média",
             command=lambda: self.exibir_resultado(self.calcular_media()),
+            style="RoundedButton.TButton"
         )
-        self.bt_media.place(relx=0.06, rely=0.1, relwidth=0.1, relheight=0.15)
+        self.bt_media.place(relx=0.02, rely=0.1, relwidth=0.1, relheight=0.15)
         self.bt_mediana = ttk.Button(
             self.frame_3,
             text="Mediana",
             command=lambda: self.exibir_resultado(self.calcular_mediana()),
             style="RoundedButton.TButton"
         )
-        self.bt_mediana.place(relx=0.17, rely=0.1, relwidth=0.1, relheight=0.15)
+        self.bt_mediana.place(relx=0.14, rely=0.1, relwidth=0.1, relheight=0.15)
         self.bt_moda = ttk.Button(
             self.frame_3,
             text="Moda",
             command=lambda: self.exibir_resultado(self.calcular_moda()),
             style="RoundedButton.TButton"
         )
-        self.bt_moda.place(relx=0.28, rely=0.1, relwidth=0.1, relheight=0.15)
+        self.bt_moda.place(relx=0.27, rely=0.1, relwidth=0.1, relheight=0.15)
         self.bt_desvio_padrao = ttk.Button(
             self.frame_3,
             text="Desvio Padrão",
@@ -294,7 +303,7 @@ class Application(Funcs):
             command=lambda: self.exibir_resultado(self.calcular_coeficienteDeVariacao()),
             style="RoundedButton.TButton"
         )
-        self.bt_coef_variacao.place(relx=0.55, rely=0.1, relwidth=0.23, relheight=0.15)
+        self.bt_coef_variacao.place(relx=0.57, rely=0.1, relwidth=0.23, relheight=0.15)
         
         self.bt_amp_total = ttk.Button(
             self.frame_3,
@@ -302,7 +311,7 @@ class Application(Funcs):
             command=lambda: self.exibir_resultado(self.calcular_amplitude_total()),
             style="RoundedButton.TButton"
         )
-        self.bt_amp_total.place(relx=0.79, rely=0.1, relwidth=0.16, relheight=0.15)
+        self.bt_amp_total.place(relx=0.82, rely=0.1, relwidth=0.16, relheight=0.15)
 
         self.resultado_label = Label(
             self.frame_3,
