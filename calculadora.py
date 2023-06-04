@@ -18,7 +18,7 @@ class Funcs:
         self.variaveis()
         coluna_valores = []
         for item in self.listaCli.get_children():
-                valor = self.listaCli.item(item, "values")[1]
+                valor = self.listaCli.item(item, "values")[0]
                 coluna_valores.append(valor)
         if self.valor in coluna_valores:
             messagebox.showerror("Erro", "Valor já inserido!")
@@ -88,6 +88,9 @@ class Funcs:
             col1, col2, col3 = self.listaCli.item(n, "values")
             self.valor_entry.insert(END, col1)
             self.frequencia_entry.insert(END, col2)
+
+    def deleta_tudo(self):
+        self.listaCli.delete(*self.listaCli.get_children())
 
     def deleta_valor(self):
         self.variaveis()
@@ -204,8 +207,8 @@ class Application(Funcs):
     def frames_da_tela(self):
         self.frame_1 = Frame(self.root, bg="#ffffff")
         self.frame_1.place(relx=0.02, rely=0.01, relwidth=0.96, relheight=0.7)
-        self.frame_3 = Frame(self.root, bg="#ffffff")
-        self.frame_3.place(relx=0.02, rely=0.68, relwidth=0.96, relheight=0.30)
+        self.frame2 = Frame(self.root, bg="#ffffff")
+        self.frame2.place(relx=0.02, rely=0.68, relwidth=0.96, relheight=0.30)
 
     def style(self):
             self.style = ttk.Style(root)
@@ -223,7 +226,7 @@ class Application(Funcs):
             )
 
     def widgets_frame1(self):
-        
+      
         ###Criação do Título da Página
         self.lb_titulo = Label(
             self.frame_1, text="Calculadora - Medidas de Tendência Central", font=("Arial", 14, "bold"), bg="#ffffff"
@@ -237,6 +240,15 @@ class Application(Funcs):
             style="RoundedButton.TButton"
         )
         self.bt_limpar.place(relx=0.88, rely=0.85, relwidth=0.1, relheight=0.1)
+
+        ###Criação do botão Excluir
+        self.bt_excluir = ttk.Button(
+            self.frame_1,
+            text="Excluir",
+            command=self.deleta_valor,
+            style="RoundedButton.TButton"
+        )
+        self.bt_excluir.place(relx=0.76, rely=0.85, relwidth=0.1, relheight=0.1)
 
         ###Criação do botão Novo
         self.novo = ttk.Button(
@@ -283,35 +295,35 @@ class Application(Funcs):
 
     def widgets_frame3(self):
         self.bt_media = ttk.Button(
-            self.frame_3,
+            self.frame2,
             text="Média",
             command=lambda: self.exibir_resultado(self.calcular_media()),
             style="RoundedButton.TButton"
         )
         self.bt_media.place(relx=0.02, rely=0.1, relwidth=0.1, relheight=0.15)
         self.bt_mediana = ttk.Button(
-            self.frame_3,
+            self.frame2,
             text="Mediana",
             command=lambda: self.exibir_resultado(self.calcular_mediana()),
             style="RoundedButton.TButton"
         )
         self.bt_mediana.place(relx=0.14, rely=0.1, relwidth=0.1, relheight=0.15)
         self.bt_moda = ttk.Button(
-            self.frame_3,
+            self.frame2,
             text="Moda",
             command=lambda: self.exibir_resultado(self.calcular_moda()),
             style="RoundedButton.TButton"
         )
         self.bt_moda.place(relx=0.27, rely=0.1, relwidth=0.1, relheight=0.15)
         self.bt_desvio_padrao = ttk.Button(
-            self.frame_3,
+            self.frame2,
             text="Desvio Padrão",
             command=lambda: self.exibir_resultado(self.calcular_desvioPadrao()),
             style="RoundedButton.TButton"
         )
         self.bt_desvio_padrao.place(relx=0.39, rely=0.1, relwidth=0.15, relheight=0.15)
         self.bt_coef_variacao = ttk.Button(
-            self.frame_3,
+            self.frame2,
             text="Coeficiente de Variação",
             command=lambda: self.exibir_resultado(self.calcular_coeficienteDeVariacao()),
             style="RoundedButton.TButton"
@@ -319,22 +331,22 @@ class Application(Funcs):
         self.bt_coef_variacao.place(relx=0.57, rely=0.1, relwidth=0.23, relheight=0.15)
         
         self.bt_amp_total = ttk.Button(
-            self.frame_3,
+            self.frame2,
             text="Amplitude Total",
-            command=self.teste,
+            command=lambda: self.exibir_resultado(self.calcular_amplitude_total()),
             style="RoundedButton.TButton"
         )
         self.bt_amp_total.place(relx=0.82, rely=0.1, relwidth=0.16, relheight=0.15)
 
         self.resultado_label = Label(
-            self.frame_3,
+            self.frame2,
         )
         self.resultado_label.place(relx=0.39, rely=0.4, relwidth=0.20, relheight=0.15)
-        
+
         self.bt_apagar = ttk.Button(
-            self.frame_3,
+            self.frame2,
             text="Zerar Valores",
-            command=self.deleta_valor,
+            command=self.deleta_tudo,
             style="RoundedButton.TButton"
         )
         self.bt_apagar.place(relx=0.415, rely=0.7, relwidth=0.15, relheight=0.22)
