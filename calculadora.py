@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 import awesometkinter as atk
-import pandas as pdp
+import pandas as pd
 
 root = Tk()
 
@@ -21,6 +21,8 @@ class Funcs:
             if self.valor.isdigit() and self.frequencia.isdigit():
                 self.select_lista()
                 self.limpa_tela()
+                self.organizar()
+                self.atualizar_freq_acumulada()
             else:
                 messagebox.showerror("Erro", "Insira somente números!")
         else:
@@ -57,6 +59,16 @@ class Funcs:
             freq_acumulada += freq_absoluta
             self.listaCli.item(item, values=(self.listaCli.item(item, "values")[0], freq_absoluta, freq_acumulada))
 
+    def organizar(self):
+        items = self.listaCli.get_children()
+        values = []
+        for item in items:
+            item_values = self.listaCli.item(item, 'values')
+            values.append(item_values)
+        sorted_values = sorted(values, key=lambda x: [int(i) for i in x])
+        for i, item in enumerate(items):
+            self.listaCli.item(item, values=sorted_values[i])
+
     def OnDoubleClick(self, event):
         self.limpa_tela()
         self.listaCli.selection()
@@ -72,8 +84,8 @@ class Funcs:
         for n in self.listaCli.selection():
             self.listaCli.delete(n)
             self.listaCli.update_idletasks()
+        self.organizar()
         self.atualizar_freq_acumulada()
-
     def calcular_media(self):
         coluna_valores = []
         for item in self.listaCli.get_children():
@@ -121,12 +133,14 @@ class Funcs:
             valor = self.listaCli.item(item, "values")
             coluna_valores.append(valor)
         df = pd.DataFrame(coluna_valores)
-        df.drop(columns=[2], inplace=True)
         df[0] = df[0].apply(lambda x: int(x))
         df[1] = df[1].apply(lambda x: int(x))
+        df[2] = df[2].apply(lambda x: int(x))
+        df = df.sort_index()
         n = df[1].sum()
         if n % 2 == 0:
             mediana = df[1].sum() / 2
+            classe_mediana = df[df[2] >= mediana].iloc[0]
         else:
             mediana = (df[1].sum() + 1) / 2
         return int(mediana)
