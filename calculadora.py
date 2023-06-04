@@ -36,19 +36,6 @@ class Funcs:
                 iid=iid,
             )
 
-    """def calc_freq_relativa(self):
-    self.variaveis()
-    try:
-        coluna_valores = []
-        for item in self.listaCli.get_children():
-            valor = self.listaCli.item(item, 'values')[1]
-            coluna_valores.append(int(valor))
-        self.soma_freq = sum(coluna_valores)
-        self.frequencia_int = int(self.frequencia)
-        self.freq_relativa = (self.frequencia_int / self.soma_freq) * 100
-    except:
-        self.freq_relativa = 0  """
-
     def calc_freq_acumulada(self):
         self.variaveis
         coluna_valores = []
@@ -142,7 +129,6 @@ class Funcs:
         else:
             mediana = (df[1].sum() + 1) / 2
         return int(mediana)
-       
 
     def calcular_coeficienteDeVariacao(self):
         coluna_valores = []
@@ -153,7 +139,7 @@ class Funcs:
         df.drop(columns=[2], inplace=True)
         df[0] = df[0].apply(lambda x: int(x))
         df[1] = df[1].apply(lambda x: int(x))
-        coeficiente = (self.calcular_desvioPadrao() / self.calcular_media())*100
+        coeficiente = (self.calcular_desvioPadrao() / self.calcular_media()) *100
         return coeficiente
 
     def calcular_amplitude_total(self):
@@ -167,7 +153,6 @@ class Funcs:
         df[1] = df[1].apply(lambda x: int(x))
         return int(df[0].max() - df[0].min())
 
-
 class Application(Funcs):
     def __init__(self):
         self.root = root
@@ -180,22 +165,25 @@ class Application(Funcs):
         root.mainloop()
 
     def tela(self):
-        self.root.title("Calculadora de Medidas de Tendências Centrais")
-        self.root.configure(background="#53524B")
-        self.root.geometry("788x1000")
+        self.root.title("Calculadora de Medidas de Tendências Central")
+        self.root.configure(background="#ffffff")
+        self.root.geometry("788x550")
         self.root.resizable(True, True)
         self.root.maxsize(width=900, height=700)
         self.root.minsize(width=500, height=400)
 
     def frames_da_tela(self):
-        self.frame_1 = Frame(self.root, bg="#B4B2A2")
-        self.frame_1.place(relx=0.02, rely=0.02, relwidth=0.96, relheight=0.30)
-        self.frame_2 = Frame(self.root, bg="#B4B2A2")
-        self.frame_2.place(relx=0.02, rely=0.35, relwidth=0.96, relheight=0.30)
-        self.frame_3 = Frame(self.root, bg="#B4B2A2")
+        self.frame_1 = Frame(self.root, bg="#ffffff")
+        self.frame_1.place(relx=0.02, rely=0.01, relwidth=0.96, relheight=0.7)
+        self.frame_3 = Frame(self.root, bg="#ffffff")
         self.frame_3.place(relx=0.02, rely=0.68, relwidth=0.96, relheight=0.30)
 
     def widgets_frame1(self):
+        ###Criação do Título da Página
+        self.lb_titulo = Label(
+            self.frame_1, text="Calculadora - Medidas de Tendência Central", font=("verdana", 14, "bold"), bg="#ffffff"
+        )
+        self.lb_titulo.place(relx=0.17, rely=0.07)
         ###Criação do botão Limpar
         self.bt_limpar = Button(
             self.frame_1,
@@ -203,7 +191,7 @@ class Application(Funcs):
             font=("verdana", 10, "bold"),
             command=self.limpa_tela,
         )
-        self.bt_limpar.place(relx=0.07, rely=0.1, relwidth=0.1, relheight=0.15)
+        self.bt_limpar.place(relx=0.88, rely=0.85, relwidth=0.1, relheight=0.1)
 
         ###Criação do botão Novo
         self.novo = Button(
@@ -212,37 +200,30 @@ class Application(Funcs):
             font=("verdana", 10, "bold"),
             command=self.add_valor,
         )
-        self.novo.place(relx=0.19, rely=0.1, relwidth=0.1, relheight=0.15)
-
-        ###Criação do botão Apagar
-        self.bt_limpar = Button(
-            self.frame_1,
-            text="Apagar",
-            font=("verdana", 10, "bold"),
-            command=self.deleta_valor,
-        )
-        self.bt_limpar.place(relx=0.82, rely=0.1, relwidth=0.1, relheight=0.15)
+        self.novo.place(relx=0.02, rely=0.2, relwidth=0.1, relheight=0.1)
 
         ## Criação da label e entrada do valor
-        self.lb_codigo = Label(
-            self.frame_1, text="valor", font=("verdana", 10, "bold"), bg="#B4B2A2"
+        self.lb_valor = Label(
+            self.frame_1, text="Valor", font=("verdana", 10, "bold"), bg="#ffffff"
         )
-        self.lb_codigo.place(relx=0.07, rely=0.35)
-        self.valor_entry = Entry(self.frame_1)
-        self.valor_entry.place(relx=0.07, rely=0.45, relwidth=0.85, relheight=0.12)
+        self.lb_valor.place(relx=0.19, rely=0.2)
+        
+        self.valor_entry = Entry(self.frame_1, background="#D9D9D9")
+        self.valor_entry.place(relx=0.19, rely=0.25, relwidth=0.1, relheight=0.05)
 
-        ## Criação da label e entrada do telefrequencia
-        self.lb_codigo = Label(
-            self.frame_1, font=("verdana", 10, "bold"), text="Frequência", bg="#B4B2A2"
+        ## Criação da label e entrada da frequência
+        self.lb_frequencia = Label(
+            self.frame_1, font=("verdana", 10, "bold"), text="Frequência", bg="#ffffff"
         )
-        self.lb_codigo.place(relx=0.07, rely=0.60)
-        self.frequencia_entry = Entry(self.frame_1)
-        self.frequencia_entry.place(relx=0.07, rely=0.7, relwidth=0.85, relheight=0.12)
+        self.lb_frequencia.place(relx=0.35, rely=0.2)
+        self.frequencia_entry = Entry(self.frame_1,  background="#D9D9D9")
+        self.frequencia_entry.place(relx=0.35, rely=0.25, relwidth=0.1, relheight=0.05)
 
     def lista_frame2(self):
-        self.listaCli = ttk.Treeview(
-            self.frame_2, height=3, column=("col1", "col2", "col3", "col4")
-        )
+        style = ttk.Style(root)
+        style.theme_use("clam")
+        style.configure("Custom.Treeview", fieldbackground="#D9D9D9", background="#D9D9D9", forebackground='#D9D9D9')
+        self.listaCli = ttk.Treeview(self.frame_1, height=3, column=("col1", "col2", "col3", "col4"), style="Custom.Treeview")
         self.listaCli.heading("#0", text="")
         self.listaCli.heading("#1", text="Valor")
         self.listaCli.heading("#2", text="Frequência Absoluta")
@@ -251,10 +232,10 @@ class Application(Funcs):
         self.listaCli.column("#1", width=100)
         self.listaCli.column("#2", width=300)
         self.listaCli.column("#3", width=300)
-        self.listaCli.place(relx=0.01, rely=0.1, relwidth=0.95, relheight=0.85)
-        self.scrollLista = Scrollbar(self.frame_2, orient="vertical")
+        self.listaCli.place(relx=0.02, rely=0.4, relwidth=0.94, relheight=0.4)
+        self.scrollLista = Scrollbar(self.frame_1, orient="vertical")
         self.listaCli.configure(yscroll=self.scrollLista.set)
-        self.scrollLista.place(relx=0.96, rely=0.1, relwidth=0.03, relheight=0.85)
+        self.scrollLista.place(relx=0.95, rely=0.4, relwidth=0.03, relheight=0.4)
         self.listaCli.bind("<Double-1>", self.OnDoubleClick)
 
     def widgets_frame3(self):
@@ -307,6 +288,14 @@ class Application(Funcs):
             font=("verdana", 10, "bold"),
         )
         self.resultado_label.place(relx=0.39, rely=0.4, relwidth=0.20, relheight=0.15)
+        
+        self.bt_limpar = Button(
+            self.frame_3,
+            text="Apagar",
+            font=("verdana", 10, "bold"),
+            command=self.deleta_valor,
+        )
+        self.bt_limpar.place(relx=0.44, rely=0.7, relwidth=0.1, relheight=0.15)
 
     def exibir_resultado(self, resultado):
         self.resultado_label.config(text="Resultado: {:.4f}".format(resultado))
