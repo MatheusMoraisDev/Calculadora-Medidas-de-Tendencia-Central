@@ -143,7 +143,8 @@ class Funcs:
             classe_mediana = df[df[2] >= mediana].iloc[0]
         else:
             mediana = (df[1].sum() + 1) / 2
-        return int(mediana)
+            classe_mediana = df[df[2] >= mediana].iloc[0]
+        return int(classe_mediana[0])
 
     def calcular_coeficienteDeVariacao(self):
         coluna_valores = []
