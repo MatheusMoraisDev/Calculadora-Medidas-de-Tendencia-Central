@@ -125,7 +125,15 @@ class Funcs:
         df[1] = df[1].apply(lambda x: int(x))
         moda = df[1].max()
         classe_modal = df.loc[df[1] == moda]
-        return int(classe_modal[0])
+        if len(classe_modal) == 2 :
+            cl_modal = "bimodal"
+        elif len(classe_modal) == 3 :
+            cl_modal = "trimodal"
+        elif len(classe_modal) >= 4 :
+            cl_modal = "várias modas"
+        else :
+            cl_modal = int(classe_modal[0])
+        return cl_modal
 
     def calcular_desvioPadrao(self):
         coluna_valores = []
@@ -352,7 +360,11 @@ class Application(Funcs):
         self.bt_apagar.place(relx=0.415, rely=0.7, relwidth=0.15, relheight=0.22)
 
     def exibir_resultado(self, resultado):
-        self.resultado_label.config(text="Resultado: {:.4f}".format(resultado))
+        if isinstance(resultado, (int, float)):
+            result_true = "Resultado: {:.4f}".format(resultado)
+        else:
+            result_true = "Resultado: {}".format(resultado)
+        self.resultado_label.config(text=result_true)
 
 
 Application()
