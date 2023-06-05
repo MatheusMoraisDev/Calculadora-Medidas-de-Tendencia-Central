@@ -30,6 +30,10 @@ class Funcs:
             self.organizar()
             self.atualizar_freq_acumulada()
 
+    def on_enter_press(self, event):
+        if event.keycode == 13:  # Código 13 corresponde à tecla "Enter"
+            self.add_valor()
+
     def teste(self):
         self.variaveis()
         coluna_valores = []
@@ -130,7 +134,7 @@ class Funcs:
         elif len(classe_modal) == 3 :
             cl_modal = "trimodal"
         elif len(classe_modal) >= 4 :
-            cl_modal = "várias modas"
+            cl_modal = "multimodal"
         else :
             cl_modal = int(classe_modal[0])
         return cl_modal
@@ -275,6 +279,7 @@ class Application(Funcs):
         
         self.valor_entry = Entry(self.frame_1, background="#ffffff")
         self.valor_entry.place(relx=0.19, rely=0.25, relwidth=0.1, relheight=0.05)
+        self.valor_entry.bind("<Return>", self.on_enter_press)
 
         ## Criação da label e entrada da frequência
         self.lb_frequencia = Label(
@@ -283,6 +288,8 @@ class Application(Funcs):
         self.lb_frequencia.place(relx=0.35, rely=0.2)
         self.frequencia_entry = Entry(self.frame_1, background="#ffffff", highlightbackground="black", highlightcolor="black", highlightthickness=0.4)
         self.frequencia_entry.place(relx=0.35, rely=0.25, relwidth=0.1, relheight=0.05)
+        self.frequencia_entry.bind("<Return>", self.on_enter_press)
+
 
 
     def lista_frame2(self):
