@@ -22,7 +22,7 @@ class Funcs:
                 coluna_valores.append(valor)
         if self.valor in coluna_valores:
             messagebox.showerror("Erro", "Valor já inserido!")
-        elif not self.valor.isdigit() or not self.frequencia.isdigit():
+        elif not self.valor.replace('.', '').replace(',', '').isdigit() or not self.frequencia.isdigit():
             messagebox.showerror("Erro", "Insira somente números!")
         else:
             self.select_lista()
@@ -31,7 +31,7 @@ class Funcs:
             self.atualizar_freq_acumulada()
 
     def on_enter_press(self, event):
-        if event.keycode == 13:  # Código 13 corresponde à tecla "Enter"
+        if event.keycode == 13: 
             self.add_valor()
 
     def teste(self):
@@ -39,7 +39,7 @@ class Funcs:
         coluna_valores = []
         for item in self.listaCli.get_children():
                 valor = self.listaCli.item(item, "values")[1]
-                coluna_valores.append(int(valor))
+                coluna_valores.append(float(valor))
         print(coluna_valores)
 
     def select_lista(self):
@@ -47,6 +47,8 @@ class Funcs:
         if self.valor or self.frequencia:
             iid = len(self.listaCli.get_children())
             self.calc_freq_acumulada()
+            self.valor = self.valor.replace(',', '.')
+            self.valor = float(self.valor)
             self.listaCli.insert(
                 parent="",
                 index="end",
@@ -60,9 +62,9 @@ class Funcs:
         try:
             for item in self.listaCli.get_children():
                 valor = self.listaCli.item(item, "values")[1]
-                coluna_valores.append(int(valor))
+                coluna_valores.append(float(valor))
             self.soma_freq = sum(coluna_valores)
-            self.freq_acumulada = self.soma_freq + int(self.frequencia)
+            self.freq_acumulada = self.soma_freq + float(self.frequencia)
         except:
             self.freq_acumulada = self.frequencia
 
@@ -70,7 +72,7 @@ class Funcs:
         items = self.listaCli.get_children()
         freq_acumulada = 0
         for item in items:
-            freq_absoluta = int(self.listaCli.item(item, "values")[1])
+            freq_absoluta = float(self.listaCli.item(item, "values")[1])
             freq_acumulada += freq_absoluta
             self.listaCli.item(item, values=(self.listaCli.item(item, "values")[0], freq_absoluta, freq_acumulada))
 
@@ -80,7 +82,7 @@ class Funcs:
         for item in items:
             item_values = self.listaCli.item(item, 'values')
             values.append(item_values)
-        sorted_values = sorted(values, key=lambda x: [int(i) for i in x])
+        sorted_values = sorted(values, key=lambda x: [float(i) for i in x])
         for i, item in enumerate(items):
             self.listaCli.item(item, values=sorted_values[i])
 
@@ -112,8 +114,8 @@ class Funcs:
             coluna_valores.append(valor)
         df = pd.DataFrame(coluna_valores)
         df.drop(columns=[2], inplace=True)
-        df[0] = df[0].apply(lambda x: int(x))
-        df[1] = df[1].apply(lambda x: int(x))
+        df[0] = df[0].apply(lambda x: float(x))
+        df[1] = df[1].apply(lambda x: float(x))
         df[2] = df[0] * df[1]
         media = df[2].sum() / df[1].sum()
         return media
@@ -125,8 +127,8 @@ class Funcs:
             coluna_valores.append(valor)
         df = pd.DataFrame(coluna_valores)
         df.drop(columns=[2], inplace=True)
-        df[0] = df[0].apply(lambda x: int(x))
-        df[1] = df[1].apply(lambda x: int(x))
+        df[0] = df[0].apply(lambda x: float(x))
+        df[1] = df[1].apply(lambda x: float(x))
         moda = df[1].max()
         classe_modal = df.loc[df[1] == moda]
         if len(classe_modal) == 2 :
@@ -136,7 +138,7 @@ class Funcs:
         elif len(classe_modal) >= 4 :
             cl_modal = "multimodal"
         else :
-            cl_modal = int(classe_modal[0])
+            cl_modal = float(classe_modal[0])
         return cl_modal
 
     def calcular_desvioPadrao(self):
@@ -146,8 +148,8 @@ class Funcs:
             coluna_valores.append(valor)
         df = pd.DataFrame(coluna_valores)
         df.drop(columns=[2], inplace=True)
-        df[0] = df[0].apply(lambda x: int(x))
-        df[1] = df[1].apply(lambda x: int(x))
+        df[0] = df[0].apply(lambda x: float(x))
+        df[1] = df[1].apply(lambda x: float(x))
         df[2] = df[0] * df[1]
         media = df[2].sum() / df[1].sum()
         mediaElevada = ((df[0] ** 2) * df[1]).sum() / df[1].sum()
@@ -160,9 +162,9 @@ class Funcs:
             valor = self.listaCli.item(item, "values")
             coluna_valores.append(valor)
         df = pd.DataFrame(coluna_valores)
-        df[0] = df[0].apply(lambda x: int(x))
-        df[1] = df[1].apply(lambda x: int(x))
-        df[2] = df[2].apply(lambda x: int(x))
+        df[0] = df[0].apply(lambda x: float(x))
+        df[1] = df[1].apply(lambda x: float(x))
+        df[2] = df[2].apply(lambda x: float(x))
         df = df.sort_index()
         n = df[1].sum()
         if n % 2 == 0:
@@ -171,7 +173,7 @@ class Funcs:
         else:
             mediana = (df[1].sum() + 1) / 2
             classe_mediana = df[df[2] >= mediana].iloc[0]
-        return int(classe_mediana[0])
+        return float(classe_mediana[0])
 
     def calcular_coeficienteDeVariacao(self):
         coluna_valores = []
@@ -180,8 +182,8 @@ class Funcs:
             coluna_valores.append(valor)
         df = pd.DataFrame(coluna_valores)
         df.drop(columns=[2], inplace=True)
-        df[0] = df[0].apply(lambda x: int(x))
-        df[1] = df[1].apply(lambda x: int(x))
+        df[0] = df[0].apply(lambda x: float(x))
+        df[1] = df[1].apply(lambda x: float(x))
         coeficiente = (self.calcular_desvioPadrao() / self.calcular_media()) *100
         return coeficiente
 
@@ -192,9 +194,9 @@ class Funcs:
             coluna_valores.append(valor)
         df = pd.DataFrame(coluna_valores)
         df.drop(columns=[2], inplace=True)
-        df[0] = df[0].apply(lambda x: int(x))
-        df[1] = df[1].apply(lambda x: int(x))
-        return int(df[0].max() - df[0].min())
+        df[0] = df[0].apply(lambda x: float(x))
+        df[1] = df[1].apply(lambda x: float(x))
+        return float(df[0].max() - df[0].min())
 
 class Application(Funcs):
     def __init__(self):
@@ -367,7 +369,7 @@ class Application(Funcs):
         self.bt_apagar.place(relx=0.415, rely=0.7, relwidth=0.15, relheight=0.22)
 
     def exibir_resultado(self, resultado):
-        if isinstance(resultado, (int, float)):
+        if isinstance(resultado, (float, float)):
             result_true = "Resultado: {:.4f}".format(resultado)
         else:
             result_true = "Resultado: {}".format(resultado)
